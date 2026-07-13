@@ -2,33 +2,30 @@ name: Executar Automação Worklab
 
 on:
   schedule:
-    - cron: '0 */2 * * *'   # A cada 2 horas
+    - cron: '0 8 * * *'
+    - cron: '0 14 * * *'
   workflow_dispatch:
 
 jobs:
-  run-script:
+  buscar-laudos:
+    strategy:
+      matrix:
+        login: [1, 2, 3, 4, 5]
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
-      - name: Configurar Python
+      
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
-
-      - name: Instalar Chromium e dependências
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y chromium-browser chromium-chromedriver xvfb
-          sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
-
-      - name: Instalar dependências Python
+          python-version: '3.11'
+      
+      - name: Instalar dependências
         run: pip install selenium
-
-      - name: Executar script
-        run: xvfb-run -a python sandalo/automacao_worklab.py
+      
+      - name: Buscar laudos - Login ${{ matrix.login }}
         env:
-          ID_LAB: ${{ secrets.ID_LAB }}
-          USUARIO: ${{ secrets.USUARIO }}
-          SENHA: ${{ secrets.SENHA }}
+          ID_LAB:  ${{ secrets[format('ID_LAB_{0}', matrix.login)] }}
+          USUARIO: ${{ secrets[format('USUARIO_{0}', matrix.login)] }}
+          SENHA:   ${{ secrets[format('SENHA_{0}', matrix.login)] }}
+        run: python sandalo/automacao_worklab.py
