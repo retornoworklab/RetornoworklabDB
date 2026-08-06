@@ -86,19 +86,10 @@ def main():
         except TimeoutException:
             print("Nenhum modal de aviso encontrado, prosseguindo...")
 
-        print("Aguardando menu Integrações...")
-        esperar_elemento(driver, By.XPATH, "//*[@id='topo-megamenu-integracao']/div[1]/img")
-
-        print("Abrindo menu Integrações...")
-        menu_integracoes = esperar_clicavel(driver, By.XPATH, "//*[@id='topo-megamenu-integracao']/div[1]/img")
-        menu_integracoes.click()
-
-        print("Clicando em Retorno do WebService DB...")
-        submenu_retorno = esperar_clicavel(
-        driver, By.XPATH,
-        "//*[normalize-space(.)='WebService DB']/following::a[contains(.,'Retorno')][1]"
-        )
-        submenu_retorno.click()
+        print("Aguardando login ser concluído...")
+        time.sleep(3)
+        print("Navegando direto para a tela de Retorno do DB...")
+        driver.get("https://app2.worklabweb.com.br/wsRetornoIntegracaoDB.php")
 
         data_inicio = calcular_data_uma_semana_atras()
         print(f"Preenchendo data de início: {data_inicio}")
