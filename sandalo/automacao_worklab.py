@@ -93,8 +93,11 @@ def main():
         menu_integracoes = esperar_clicavel(driver, By.XPATH, "//*[@id='topo-megamenu-integracao']/div[1]/img")
         menu_integracoes.click()
 
-        print("Clicando em Retorno...")
-        submenu_retorno = esperar_clicavel(driver, By.XPATH, "//*[@id='megamenu-integracao']/ul[1]/li[5]/ul/li[2]/a")
+        print("Clicando em Retorno do WebService DB...")
+        submenu_retorno = esperar_clicavel(
+        driver, By.XPATH,
+        "//*[normalize-space(.)='WebService DB']/following::a[contains(.,'Retorno')][1]"
+        )
         submenu_retorno.click()
 
         data_inicio = calcular_data_uma_semana_atras()
