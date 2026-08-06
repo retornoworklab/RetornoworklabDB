@@ -88,7 +88,7 @@ def main():
 
         print("Aguardando login ser concluído...")
         time.sleep(3)
-        print("Navegando direto para a tela de Retorno do DB...")
+        print("Navegando direto para a tela de Retorno do Alvaro...")
         driver.get("https://app2.worklabweb.com.br/wsRetornoIntegracaoAlvaro.php")
 
         data_inicio = calcular_data_uma_semana_atras()
