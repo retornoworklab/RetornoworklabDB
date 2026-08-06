@@ -1,15 +1,32 @@
 name: Automacao Alvaro
 
 on:
+  schedule:
+    - cron: '0 */2 * * *'
   workflow_dispatch:
 
 jobs:
-  automatizar:
+  run-script:
+    strategy:
+      matrix:
+        login: [1, 2, 3, 4, 5]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Configurar Python
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
-      - run: pip install selenium
-      - run: python sandalo/automacao_alvaro.py
+          python-version: '3.10'
+      - name: Instalar Chromium e dependências
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser chromium-chromedriver xvfb
+          sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
+      - name: Instalar dependências Python
+        run: pip install selenium
+      - name: Executar script - Login ${{ matrix.login }}
+        run: xvfb-run -a python sandalo/automacao_alvaro.py
+        env:
+          ID_LAB: ${{ secrets[format('ID_LAB_{0}', matrix.login)] }}
+          USUARIO: ${{ secrets[format('USUARIO_{0}', matrix.login)] }}
+          SENHA: ${{ secrets[format('SENHA_{0}', matrix.login)] }}
